@@ -30,7 +30,7 @@ const checkTodoExists = (request, response, next) => {
     params: { id },
   } = request;
 
-  const todo = user.todos.find((item) => item.id === id);
+  const todo = user.todos.find((todo) => todo.id === id);
 
   if (!todo) {
     return response.status(404).json({ error: "Todo doesn't exists" });
@@ -46,7 +46,7 @@ app.post("/users", (request, response) => {
     body: { name, username },
   } = request;
 
-  const userAlreadyExists = users.some((item) => item.username === username);
+  const userAlreadyExists = users.some((user) => user.username === username);
 
   if (userAlreadyExists) {
     return response.status(400).json({ error: "User already exists" });
@@ -64,7 +64,7 @@ app.post("/users", (request, response) => {
   return response.status(201).json(user);
 });
 
-app.get("/account", checkUserAccountExists, (request, response) => {
+app.get("/todos", checkUserAccountExists, (request, response) => {
   const {
     user: { todos },
   } = request;
@@ -72,7 +72,7 @@ app.get("/account", checkUserAccountExists, (request, response) => {
   return response.status(200).json(todos);
 });
 
-app.post("/account", checkUserAccountExists, (request, response) => {
+app.post("/todos", checkUserAccountExists, (request, response) => {
   const {
     user,
     body: { title, deadline },
@@ -92,7 +92,7 @@ app.post("/account", checkUserAccountExists, (request, response) => {
 });
 
 app.put(
-  "/account/:id",
+  "/todos/:id",
   checkUserAccountExists,
   checkTodoExists,
   (request, response) => {
@@ -109,7 +109,7 @@ app.put(
 );
 
 app.patch(
-  "/account/:id/patch",
+  "/todos/:id/done",
   checkUserAccountExists,
   checkTodoExists,
   (request, response) => {
@@ -122,7 +122,7 @@ app.patch(
 );
 
 app.delete(
-  "/account/:id",
+  "/todos/:id",
   checkUserAccountExists,
   checkTodoExists,
   (request, response) => {
